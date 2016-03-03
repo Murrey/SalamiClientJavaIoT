@@ -1,7 +1,7 @@
 ﻿
-using System.Net.Http;
-package it.bway.salami.communication
-{
+
+package it.bway.salami.communication;
+
     public class SalamiHttpClient
     {
         private String url;
@@ -17,4 +17,4 @@ package it.bway.salami.communication
             return new ResponseAdapter(response);
         }
     }
-}
+

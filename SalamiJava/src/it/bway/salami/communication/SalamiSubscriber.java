@@ -32,7 +32,7 @@ public class SalamiSubscriber
         }
         public void onMessage(ClientWebSocket ws, String message)
         {
-            foreach(Callback callback in subscribers)
+            for(Callback callback : subscribers)
             {
                 callback(message);
             }

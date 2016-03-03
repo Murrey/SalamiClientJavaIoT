@@ -12,7 +12,7 @@ public class ResponseAdapter
         }
         public SalamiRecipe toObject()
         {
-            return SalamiModelUtil.jsonToObject<SalamiRecipe>(response);
+            return (SalamiRecipe) SalamiModelUtil.jsonToObject(response,SalamiRecipe.class);
         }
     }
 
