@@ -1,0 +1,7 @@
+.metadata/
+.recommenders/
+SalamiJava/.gitignore
+SalamiJava/.classpath
+SalamiJava/.project
+.vs/config/applicationhost.config
+SalamiJava/ClassDiagram1.cd
