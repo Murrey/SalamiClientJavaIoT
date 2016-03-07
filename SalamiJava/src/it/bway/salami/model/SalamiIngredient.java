@@ -1,7 +1,7 @@
 ﻿
 package it.bway.salami.model;
 
-    public class SalamiIngredient
+    public class SalamiIngredient  extends ABSModel
     {
         public int index = 0;
         public String name = "";

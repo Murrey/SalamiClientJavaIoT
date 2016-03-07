@@ -1,12 +1,4 @@
-﻿using SalamiClient.communication;
-using SalamiClient.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-package it.bway.salami.chef
+﻿package it.bway.salami.chef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +13,11 @@ import it.bway.salami.model.SalamiMasterChefInfo;
 import it.bway.salami.model.SalamiMessage;
 import it.bway.salami.model.SalamiMessageBuilder;
 import it.bway.salami.model.SalamiRecipe;
-
+/**
+ * Questa classe gestisce le connessioni verso il server, inviando e ricevendo messaggi secondo richieste.
+ * @author Riccardo
+ *
+ */
 public class SalamiAssistantChef
     {
 
@@ -33,6 +29,7 @@ public class SalamiAssistantChef
         private List<SalamiIngredient> ingredients;
         private ChefWorker worker;
 
+        
         public SalamiAssistantChef(SalamiInitData initData)
         {
             this.slot = initData.sliceSlot;
@@ -45,18 +42,25 @@ public class SalamiAssistantChef
 
         private void joinKitchen(String socketUrl)
         {
-            this.receiver = new SalamiSubscriber(socketUrl + "/downstream?id=" + this.slot, this.onDownstreamMessage);
-            this.publisher = new SalamiSubscriber(socketUrl + "/upstream?id=" + this.slot, this.onUpstreamMessage);
-            this.system = new SalamiSubscriber(socketUrl + "/system?id=ALL", this.onSystemMessage);
+            this.receiver = new SalamiSubscriber(socketUrl + "/downstream?id=" + this.slot, this.kitchenCallback);
+            this.publisher = new SalamiSubscriber(socketUrl + "/upstream?id=" + this.slot, this.kitchenCallback);
+            this.system = new SalamiSubscriber(socketUrl + "/system?id=ALL", this.kitchenCallback);
         }
-
+        /**
+         * Recupera l'insieme di istruzioni (ricetta) dal server.
+         * @param toiUrl
+         * @return
+         */
         private SalamiRecipe retrieveRecipe(String toiUrl)
         {
             String recipeUrl = toiUrl + SalamiConstants.RECEIVER_URL;
             SalamiHttpClient httpClient = new SalamiHttpClient(recipeUrl);
-            return httpClient.get().Result.toObject();
+            return httpClient.get().toObject();
         }
-
+        /**
+         * Svuota la lista di ingredienti della ricetta e 
+         * @param recipe
+         */
         private void loadIngredients(SalamiRecipe recipe)
         {
             this.ingredients.clear();
@@ -90,10 +94,10 @@ public class SalamiAssistantChef
 
         public  boolean validateMessage(SalamiMessage message)
         {
-            if((message.source.ToString() != this.slot.ToString())&&(message.destination == "ALL"))
+            if((message.source != this.slot)&&(message.destination == "ALL"))
             {
                 return true;
-            } else if(message.destination == this.slot.ToString())
+            } else if(message.destination == this.slot+"")
             {
                 return true;
             }
@@ -111,13 +115,13 @@ public class SalamiAssistantChef
                 this.sendStatusUpdate("LOADING INGREDIENTS");
                 this.loadIngredients(recipe);
                 this.worker = new ChefWorker(this.ingredients);
-                this.worker.setToSliceMessageCallback(this.onActionMessage);
+                this.worker.setToSliceMessageCallback(null);//(this.onActionMessage);
                 this.sendStatusUpdate("RUNNING");
                 return true;
             }
             if (command.contains(SalamiConstants.UPDATE_INGREDIENT))
             {
-                SalamiMessage message = command[SalamiConstants.UPDATE_INGREDIENT];
+                SalamiMessage message = null;//command[SalamiConstants.UPDATE_INGREDIENT];
                 //create SalamiCommand e sostuire String command con SalamiCommand command e fare le dovute sostituzioni
             }
             return false;

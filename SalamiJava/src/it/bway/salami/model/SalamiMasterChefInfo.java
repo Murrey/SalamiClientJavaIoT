@@ -1,7 +1,7 @@
 ﻿
 package it.bway.salami.model;
 
-public class SalamiMasterChefInfo
+public class SalamiMasterChefInfo  extends ABSModel
 {
     public String id;
     public String ip;

@@ -1,2 +1,2 @@
 # SalamiClientWinIoT
-SalamiClient in c# for Windows IoT Core
+SalamiClient in Java for IoT Core

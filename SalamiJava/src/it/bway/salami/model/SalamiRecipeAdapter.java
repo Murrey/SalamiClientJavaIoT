@@ -1,7 +1,7 @@
 ﻿
 package it.bway.salami.model;
 
-public class SalamiRecipeAdapter
+public class SalamiRecipeAdapter extends ModelAdapter
 {
     private SalamiRecipe recipe;
     public SalamiRecipeAdapter(SalamiRecipe recipe)

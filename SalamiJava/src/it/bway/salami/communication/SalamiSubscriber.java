@@ -1,47 +1,81 @@
 ﻿package it.bway.salami.communication;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.bway.salami.Callback;
+import it.bway.salami.model.SalamiMessageAdapter;
 
 public class SalamiSubscriber
     {
         private String url;
         private List<Callback> subscribers;
-        private ClientWebSocket websocketClient;
-        public CancellationTokenSource token = new CancellationTokenSource();
+        private Socket websocketClient;
         private Callback callback;
+        /**
+         * Questa classe viene chiamata per inviare e ricevere dati dal server
+         * @param url
+         * @param callback
+         */
+        		
         public SalamiSubscriber(String url, Callback callback)
         {
             this.url = url;
             this.callback = callback;
             this.websocketClient = subscribe(url, callback);
-            this.subscribers = new List<Callback>();
+            this.subscribers = new ArrayList<Callback>();
         }
-        public ClientWebSocket subscribe(String url, Callback callback)
+        public Socket subscribe(String url, Callback callback)
         {
-            ClientWebSocket client = new ClientWebSocket();
-            client.ConnectAsync(new Uri(url), token.Token);
-            this.subscribers.Add(callback);
+
+            Socket client = null;
+			try {
+				URI path = new URI(this.url);
+				client = new Socket(path.getHost(),path.getPort());
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
+            this.subscribers.add(callback);
             return client;
         }
+        /**
+         * Invio Stringa al server
+         * @param message
+         */
         public void publish(String message)
         {
-            ArraySegment<byte> byteMessage = new ArraySegment<byte>(Encoding.UTF8.GetBytes(message));
-            this.websocketClient.SendAsync(byteMessage, WebSocketMessageType.Binary, true, token.Token);
+        	try {
+				PrintStream out = new PrintStream(this.websocketClient.getOutputStream(), true);
+				out.print(message);
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+//            ArraySegment<byte> byteMessage = new ArraySegment<byte>(Encoding.UTF8.GetBytes(message));
+//            this.websocketClient.SendAsync(byteMessage, WebSocketMessageType.Binary, true, token.Token);
         }
-        public void onMessage(ClientWebSocket ws, String message)
+        public void onMessage(Socket ws, String message)
         {
             for(Callback callback : subscribers)
             {
-                callback(message);
+//                callback(message);
             }
         }
-        public void onError(ClientWebSocket ws, SalamiMessage message)
+        public void onError(Socket ws, SalamiMessageAdapter message)
         {
         }
         public void disconnect()
         {
-            this.websocketClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "normal exit", token.Token);
+    		try {
+				this.websocketClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         }
     }

@@ -1,7 +1,6 @@
-﻿
-package it.bway.salami.model;
+﻿package it.bway.salami.model;
 
-public class SalamiInitDataAdapter
+public class SalamiInitDataAdapter extends ModelAdapter
 {
     private SalamiInitData initData;
     public SalamiInitDataAdapter(SalamiInitData initData)

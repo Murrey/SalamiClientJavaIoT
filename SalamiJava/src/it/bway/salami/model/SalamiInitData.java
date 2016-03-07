@@ -2,7 +2,7 @@
 
 import it.bway.salami.Callback;
 
-public class SalamiInitData
+public class SalamiInitData extends ABSModel
 {
     public String toiUrl = "";
     public int sliceSlot;
@@ -13,7 +13,7 @@ public class SalamiInitData
         String result = "";
         result += "{ toi_url: " + this.toiUrl + ",";
         result = result + "slice_id: " + this.sliceSlot + ",";
-        //result = result + this.messageCallback + "}";
+        result = result + this.messageCallback + "}";
         return result;
     }
 }

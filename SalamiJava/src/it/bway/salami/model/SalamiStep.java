@@ -2,7 +2,7 @@
 
 import java.util.List;
 
-public class SalamiStep
+public class SalamiStep  extends ABSModel
 {
     public String crontab;
     public int sleep;

@@ -1,7 +1,7 @@
 ﻿
 package it.bway.salami.model;
 
-public class SalamiActionAdapter extends SalamiAction
+public class SalamiActionAdapter extends ModelAdapter
 {
     private SalamiAction action;
     public SalamiActionAdapter(SalamiAction action)

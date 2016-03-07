@@ -4,7 +4,7 @@ import it.bway.salami.SalamiConstants;
 import it.bway.salami.Exception.NotImplementedException;
 
 
-    public class SalamiAction
+    class SalamiAction extends ABSModel
     {
         public static final String GPIO_HOLD_FIELD = "HOLD";
         public static final String GPIO_WAIT_FIELD = "WAIT";

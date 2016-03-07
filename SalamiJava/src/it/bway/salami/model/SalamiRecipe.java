@@ -3,7 +3,7 @@ package it.bway.salami.model;
 
 import java.util.List;
 
-public class SalamiRecipe
+public class SalamiRecipe  extends ABSModel
     {
         public String name;
         public String timeFrame;
